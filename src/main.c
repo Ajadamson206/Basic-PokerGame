@@ -15,22 +15,37 @@ struct background{
     float r, g, b, a;
 } mainBG;
 
+float vertices[] = {
+    -0.5f, -0.5f, 0.0f,
+    0.5f, -0.5f, 0.0f,
+    0.5f, 0.5f, 0.0f
+};
+
+void updateBackground(float red, float green, float blue, float alpha)
+{
+    mainBG.r = red;
+    mainBG.g = green;
+    mainBG.b = blue;
+    mainBG.a = alpha;
+}
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
 
-void processInput(GLFWwindow *window)
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-    
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-
-    if(glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+    switch (key)
     {
+    case GLFW_KEY_ESCAPE:
+        glfwSetWindowShouldClose(window, true);
+        break;
+    case GLFW_KEY_SPACE:
         mainBG.r = 1.0f;
         mainBG.g = 0.0f;
         mainBG.b = 0.0f;    
+        break;
     }
 }
 
@@ -56,6 +71,7 @@ int main(void)
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
+    glfwSetKeyCallback(window, key_callback);
     if (!gladLoadGL(glfwGetProcAddress))
     {
         fprintf(stderr, "Unable to load GLAD\n");
@@ -66,16 +82,11 @@ int main(void)
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // Default Background Color
-    mainBG.r = 0.2f;
-    mainBG.g = 0.3f;
-    mainBG.b = 0.3f;    
-    mainBG.a = 1.0f;
+    updateBackground(0.2f, 0.3f, 0.3f, 1.0f);
 
     // Render Loop
     while (!glfwWindowShouldClose(window))
     {
-        // Input
-        processInput(window);
 
         // Render Below Here
 

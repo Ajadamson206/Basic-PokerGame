@@ -49,23 +49,18 @@ int deck[] = {
 const int* deckStart = &deck[0];
 
 // Shuffle a deck - Uses the Fisher-Yates Shuffle
-void shuffleCards(){
-
-    int n = SIZE_OF_DECK;
-
+void shuffleCards(void){
     struct timespec tv;
     timespec_get(&tv, TIME_UTC);
     srand48(tv.tv_nsec);
 
 
-    if (n > 1) {
-        size_t i;
-        for (i = n - 1; i > 0; i--) {
-            size_t j = (unsigned int) (drand48()*(i+1));
-            int t = deck[j];
-            deck[j] = deck[i];
-            deck[i] = t;
-        }
+    size_t i;
+    for (i = SIZE_OF_DECK - 1; i > 0; i--) {
+        size_t j = (unsigned int) (drand48()*(i+1));
+        int t = deck[j];
+        deck[j] = deck[i];
+        deck[i] = t;
     }
 }
 // 1 = Diamonds 2 = Spades 3 = Hearts 4 = Clubs 5 = Joker
@@ -94,7 +89,7 @@ short getCardValue(int card)
     return value;
 }
 
-void resetDeck()
+void resetDeck(void)
 {
     for(int i = 1; i <= SIZE_OF_DECK; i++)
         deck[i-1] = i;
