@@ -7,19 +7,16 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
+#include "renderer.c"
+
 
 #define STD_WINDOW_HEIGHT 480
 #define STD_WINDOW_WIDTH 640
 
+
 struct background{
     float r, g, b, a;
 } mainBG;
-
-float vertices[] = {
-    -0.5f, -0.5f, 0.0f,
-    0.5f, -0.5f, 0.0f,
-    0.5f, 0.5f, 0.0f
-};
 
 void updateBackground(float red, float green, float blue, float alpha)
 {
@@ -29,12 +26,12 @@ void updateBackground(float red, float green, float blue, float alpha)
     mainBG.a = alpha;
 }
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
 
-void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
+static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
     switch (key)
     {
@@ -52,6 +49,8 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
 int main(void)
 {
     GLFWwindow* window;
+    GLuint shaderProgram, vertexShader, fragmentShader, vertexBuffer, vertexArrayBuffer;
+
 
     /* Initialize the library */
     if (!glfwInit())
@@ -60,6 +59,9 @@ int main(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
+    #ifdef __APPLE__
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    #endif
 
     /* Create a windowed mode window and its OpenGL context */
     window = glfwCreateWindow(STD_WINDOW_WIDTH, STD_WINDOW_HEIGHT, "Poker", NULL, NULL);
@@ -81,7 +83,8 @@ int main(void)
     // Set the framebuffer Size Function
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    // Default Background Color
+    render(window, &vertexShader, &fragmentShader, &shaderProgram, &vertexBuffer, &vertexArrayBuffer);
+    
     updateBackground(0.2f, 0.3f, 0.3f, 1.0f);
 
     // Render Loop
@@ -90,9 +93,13 @@ int main(void)
 
         // Render Below Here
 
+
         glClearColor(mainBG.r, mainBG.g, mainBG.b, mainBG.a);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        glUseProgram(shaderProgram);
+        glBindVertexArray(vertexArrayBuffer);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
 
 
