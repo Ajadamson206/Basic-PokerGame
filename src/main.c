@@ -55,7 +55,10 @@ int main(void)
 
     /* Initialize the library */
     if (!glfwInit())
+    {
+        fprintf(stderr, "Unable to Initialize GLFW\n");
         exit(EXIT_FAILURE);
+    }
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -78,6 +81,7 @@ int main(void)
     window = glfwCreateWindow(mode->width, mode->height, "Poker", monitor, NULL);
     if (!window)
     {
+        fprintf(stderr, "Unable to Create Window\n");
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
@@ -88,7 +92,8 @@ int main(void)
     if (!gladLoadGL(glfwGetProcAddress))
     {
         fprintf(stderr, "Unable to load GLAD\n");
-
+        glfwTerminate();
+        exit(EXIT_FAILURE);
     }
 
     // Set the framebuffer Size Function

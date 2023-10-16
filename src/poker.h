@@ -89,8 +89,35 @@ short getCardValue(int card)
     return value;
 }
 
+bool handHasAce(int* hand)
+{
+    for (int i = 0; i < 5; i++)
+    {
+        if(getCardSuit(hand[i]) == 1)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 void resetDeck(void)
 {
     for(int i = 1; i <= SIZE_OF_DECK; i++)
         deck[i-1] = i;
 }
+
+/*
+Winnings
+Royal Flush - 250
+Straight Flush - 50
+4 of a Kind - 25
+Full House - 9
+Flush - 6
+Straight - 4
+3 of a kind - 3
+2 pair - 2
+Jacks or Better - 1
+
+
+*/

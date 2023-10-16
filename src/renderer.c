@@ -58,3 +58,29 @@ static void renderBuffers(GLuint *vertexBuffer, unsigned int numVB, GLuint *vert
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 }
+
+static void renderCard(int cardSuit, int cardValue, int cardPos)
+{
+    /*  
+    cardSuit ->
+        1 = Diamonds
+        2 = Spaces
+        3 = Hearts
+        4 = Clubs
+
+    cardValue ->
+        1 = Ace
+        2-10
+        11 = Jack
+        12 = Queen
+        13 = King
+    
+    cardPos ->
+        0 = First
+        1 = Second
+        2 = Third
+        3 = Fourth
+        4 = Fifth
+    */
+
+}

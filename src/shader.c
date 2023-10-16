@@ -3,26 +3,33 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-static const char *vertexShaderSource = "#version 330 core\n"
-"layout (location = 0) in vec3 aPos;\n"
-"void main()\n"
-"{\n"
-" gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-"}\0";
+// Load Shaders from a file
+static const char* getShaderContent(char* fileName)
+{
+    FILE *shaderSource;
+    long size = 0;
+    char* shaderContent;
+    
+    /* Read File to get size */
+    shaderSource = fopen(fileName, "rb");
+    if(shaderSource == NULL) {
+        fprintf(stderr, "Unable to read shader\n");
+        return "";
+    }
+    fseek(shaderSource, 0L, SEEK_END);
+    size = ftell(shaderSource)+1;
+    fclose(shaderSource);
 
-static const char *orangeFragmentShaderSource = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-"}\n";
-static const char *yellowFragmentShaderSource = "#version 330 core\n"
-"out vec4 FragColor;\n"
-"void main()\n"
-"{\n"
-"FragColor = vec4(1.0f, 1.0f, 0.2f, 1.0f);\n"
-"}\n";
+    /* Read File for Content */
+    shaderSource = fopen(fileName, "r");
+    shaderContent = memset(malloc(size), '\0', size);
+    fread(shaderContent, 1, size-1, shaderSource);
+    fclose(shaderSource);
+
+    return shaderContent;
+}
 
 static void shade(GLuint* vertexShader, GLuint* fragmentShader, GLuint* shaderProgram, unsigned int color)
 {
@@ -32,6 +39,7 @@ static void shade(GLuint* vertexShader, GLuint* fragmentShader, GLuint* shaderPr
 
     
     // Compile the vertex shader
+    const char* vertexShaderSource = getShaderContent("src/shaders/vertex.glsl");
     *vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(*vertexShader, 1 , &vertexShaderSource, NULL);
     glCompileShader(*vertexShader);
@@ -47,13 +55,17 @@ static void shade(GLuint* vertexShader, GLuint* fragmentShader, GLuint* shaderPr
     }
 
     // Compile the Fragment Shader
-
-   
     *fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    if(color)
+    if(color == 1)
+    {
+        const char* orangeFragmentShaderSource = getShaderContent("src/shaders/orange.glsl");
         glShaderSource(*fragmentShader, 1, &orangeFragmentShaderSource, NULL);
+    }
     else
+    {
+        const char* yellowFragmentShaderSource = getShaderContent("src/shaders/yellow.glsl");
         glShaderSource(*fragmentShader, 1, &yellowFragmentShaderSource, NULL);
+    }
     glCompileShader(*fragmentShader); 
    
     
@@ -86,7 +98,7 @@ static void shade(GLuint* vertexShader, GLuint* fragmentShader, GLuint* shaderPr
     }
    
     // Delete Already Linked Shaders
-    //glDeleteShader(*vertexShader);
-    //glDeleteShader(*fragmentShader);
+    glDeleteShader(*vertexShader);
+    glDeleteShader(*fragmentShader);
 
 }
