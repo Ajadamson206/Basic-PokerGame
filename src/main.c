@@ -38,10 +38,10 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
     case GLFW_KEY_ESCAPE:
         glfwSetWindowShouldClose(window, true);
         break;
-    case GLFW_KEY_SPACE:
-        mainBG.r = 1.0f;
-        mainBG.g = 0.0f;
-        mainBG.b = 0.0f;    
+    case GLFW_KEY_A:   
+        double mouseX, mouseY;
+        glfwGetCursorPos(window,&mouseX, &mouseY);
+        printf("MouseX: %f, MouseY: %f\n", mouseX, mouseY);
         break;
     }
 }
@@ -49,8 +49,7 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
 int main(void)
 {
     GLFWwindow* window;
-    GLuint shaderProgram, vertexShader, fragmentShader, shaderProgram2, vertexShader2, fragmentShader2; 
-    GLuint vertexBuffer[2], vertexArrayBuffer[2], elementBuffer[2];
+    GLuint vertexBuffer[5], vertexArrayBuffer[5], elementBuffer[5];
 
 
     /* Initialize the library */
@@ -99,12 +98,11 @@ int main(void)
     // Set the framebuffer Size Function
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    shade(&vertexShader, &fragmentShader, &shaderProgram, 1);
-    shade(&vertexShader2, &fragmentShader2, &shaderProgram2, 2);
-    renderBuffers(&vertexBuffer[0], 2, &vertexArrayBuffer[0], 2, &elementBuffer[0], 2);
+    GLuint whiteProgram = shade(WHITE_FILE);
+    renderCards(&vertexBuffer[0], &vertexArrayBuffer[0], &elementBuffer[0], 5);
     
     
-    updateBackground(0.2f, 0.3f, 0.3f, 1.0f);
+    updateBackground(0.212f, 0.631f, 0.212f, 1.0f);
 
     // Render Loop
     while (!glfwWindowShouldClose(window))
@@ -116,17 +114,16 @@ int main(void)
         glClearColor(mainBG.r, mainBG.g, mainBG.b, mainBG.a);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(shaderProgram);
-        glBindVertexArray(vertexArrayBuffer[0]);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-
-
-        glUseProgram(shaderProgram2);
-        glBindVertexArray(vertexArrayBuffer[1]);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-
+        //int vertexColorLocation = glGetUniformLocation(shaderProgram, "Color");
+        glUseProgram(whiteProgram);
+        //glUniform4f(vertexColorLocation, 1.0f, 1.0f, 1.0f, 1.0f);
+        for(int i = 0; i < 5; i++)
+        {
+            glBindVertexArray(vertexArrayBuffer[i]);
+            //glDrawArrays(GL_TRIANGLES, 0, 3);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+            glBindVertexArray(0);
+        }
 
         // Swap Buffers and check events
         glfwSwapBuffers(window);

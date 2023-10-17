@@ -5,6 +5,14 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define ORANGE_FILE "src/shaders/orange.glsl"
+#define YELLOW_FILE "src/shaders/yellow.glsl"
+#define WHITE_FILE "src/shaders/white.glsl"
+#define RUN_TIME_COLOR "src/shaders/runTimeColor.glsl"
+#define VERTEX_FILE "src/shaders/vertex.glsl"
+#define RED_FILE "src/shaders/red.glsl"
+#define BLACK_FILE "src/shaders/black.glsl"
+
 // Load Shaders from a file
 static const char* getShaderContent(char* fileName)
 {
@@ -31,74 +39,67 @@ static const char* getShaderContent(char* fileName)
     return shaderContent;
 }
 
-static void shade(GLuint* vertexShader, GLuint* fragmentShader, GLuint* shaderProgram, unsigned int color)
+static GLuint shade(char* color)
 {
+    GLuint vertexShader, fragmentShader, shaderProgram;
+
     // Error Checking
     int success;
     char infoLog[512];
 
     
     // Compile the vertex shader
-    const char* vertexShaderSource = getShaderContent("src/shaders/vertex.glsl");
-    *vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(*vertexShader, 1 , &vertexShaderSource, NULL);
-    glCompileShader(*vertexShader);
+    const char* vertexShaderSource = getShaderContent(VERTEX_FILE);
+    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1 , &vertexShaderSource, NULL);
+    glCompileShader(vertexShader);
 
     // Get Vertex Shader Compile Status
-    glGetShaderiv(*vertexShader, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
 
     // Failed Vertex Shader Compile
     if (!success)
     {
-        glGetShaderInfoLog(*vertexShader, 512, NULL, infoLog);
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
         fprintf(stderr, "VERTEX SHADER COMPILE ERROR\n%s\n", infoLog);
     }
 
     // Compile the Fragment Shader
-    *fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    if(color == 1)
-    {
-        const char* orangeFragmentShaderSource = getShaderContent("src/shaders/orange.glsl");
-        glShaderSource(*fragmentShader, 1, &orangeFragmentShaderSource, NULL);
-    }
-    else
-    {
-        const char* yellowFragmentShaderSource = getShaderContent("src/shaders/yellow.glsl");
-        glShaderSource(*fragmentShader, 1, &yellowFragmentShaderSource, NULL);
-    }
-    glCompileShader(*fragmentShader); 
-   
-    
+    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    const char* fragmentShaderSource = getShaderContent(color);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader); 
     
     // Get Fragment Shader Compile Status
-    glGetShaderiv(*fragmentShader, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
 
     // Failed Fragment Shader Comile
     if(!success)
     {
-        glGetShaderInfoLog(*fragmentShader, 512, NULL, infoLog);
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
         fprintf(stderr, "FRAGEMENT SHADER COMPILE ERROR\n%s\n", infoLog);
     }
 
 
     // Generate Shader Program
-    *shaderProgram = glCreateProgram();
-    glAttachShader(*shaderProgram, *vertexShader);
-    glAttachShader(*shaderProgram, *fragmentShader);
-    glLinkProgram(*shaderProgram);
+    shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
 
     // Get Shader Program Status
-    glGetProgramiv(*shaderProgram, GL_LINK_STATUS, &success);
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
 
     // Check Shader Program Status
     if(!success)
     {
-        glGetProgramInfoLog(*shaderProgram, 512, NULL, infoLog);
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
         fprintf(stderr, "UNABLE TO LINK SHADER PROGRAM\n%s\n", infoLog);
     }
    
     // Delete Already Linked Shaders
-    glDeleteShader(*vertexShader);
-    glDeleteShader(*fragmentShader);
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
 
+    return shaderProgram;
 }

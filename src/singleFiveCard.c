@@ -16,21 +16,16 @@ void updateSettings(bool newJokers, short newWildCard)
     game.jokers = newJokers;
     game.wildCard = newWildCard;
 }
-
-void replaceCard(int* hand, int* deck, int handPos)
-{
-    hand[handPos] = *deck;
-}
-
 void play(void)
 {
     int winnings = 5;
     while(winnings != 0)
     {
+        struct handCard card[HAND_SIZE];
         int* pDeck = deckStart;
         shuffleCards();
-        int hand[5];
-        for (int i = 0; i < 5; i++) // Add Cards to the Hand
+        bool posReplace[HAND_SIZE]; // Shows which cards to replace {true, false, true, false, true} -> Will replace positions 0, 2, 4
+        for (int i = 0; i < HAND_SIZE; i++) // Add Cards to the Hand
         {
             if (!game.jokers) // Jokers are not in Game 
             {   
@@ -41,21 +36,26 @@ void play(void)
                         pDeck++;
                 }
             }
-            hand[i] = *pDeck; // No need to check for a third Joker, there are only two
-            renderCard(getCardSuit(hand[i]), getCardValue(hand[i]), i);
+            updateCard(*pDeck, &card[i]); // No need to check for a third Joker, there are only two
+            //renderCard(card[i], i);
             pDeck++;
         }
-        int* phand = &hand[0];
-    
         // Get Userinput to replace cards in their hand
         // if (has an Ace) -> Possible replace cards = 4; else possible replace cards = 3;
         int numCardsPosReplace;
-        if (handHasAce(hand[0]))
+        if (handHasAce(&card[0]))
             numCardsPosReplace = 4;
         else
             numCardsPosReplace = 3;
-    
 
+        replaceHand(&card[0], &pDeck, posReplace, SIZE_OF_DECK);
+
+        // check for winning patterns
+
+        // update winnings
+
+        // end game
+        resetDeck();
 
     }
 

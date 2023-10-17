@@ -18,6 +18,7 @@ Joker2 53
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <stdbool.h>
 
 #define SIZE_OF_DECK 54
 
@@ -38,6 +39,10 @@ Suit range 1-4
     3 = Hearts
     4 = Clubs
 */
+struct handCard{
+    int suit;
+    int value;
+};
 
 int deck[] = {
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 
@@ -89,11 +94,11 @@ short getCardValue(int card)
     return value;
 }
 
-bool handHasAce(int* hand)
+bool handHasAce(struct handCard* card)
 {
     for (int i = 0; i < 5; i++)
     {
-        if(getCardSuit(hand[i]) == 1)
+        if((card[i].value) == 1)
         {
             return true;
         }
@@ -107,8 +112,33 @@ void resetDeck(void)
         deck[i-1] = i;
 }
 
+void replaceCard(int* hand, int* pdeck, int handPos)
+{
+    hand[handPos] = *deck;
+}
+
+void updateCard(int Deck, struct handCard* card)
+{
+    card->suit = getCardSuit(Deck);
+    card->value = getCardValue(Deck);
+}
+
+void replaceHand(struct handCard* hand, int** pDeck, bool* posReplace, int deckSize)
+{
+    for(int i = 0; i < deckSize; i++)
+    {
+        if(posReplace[i]) // If a position is true, replace that card
+        {
+            hand[i].value = getCardValue(**pDeck);
+            hand[i].suit = getCardSuit(**pDeck);
+            (*pDeck)++;
+        }
+    }
+}
+
 /*
 Winnings
+5 of a kind - 350
 Royal Flush - 250
 Straight Flush - 50
 4 of a Kind - 25
