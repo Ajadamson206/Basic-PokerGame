@@ -21,7 +21,7 @@ void play(void)
     int winnings = 5;
     while(winnings != 0)
     {
-        struct handCard card[HAND_SIZE];
+        Card card[HAND_SIZE];
         int* pDeck = deckStart;
         shuffleCards();
         bool posReplace[HAND_SIZE]; // Shows which cards to replace {true, false, true, false, true} -> Will replace positions 0, 2, 4

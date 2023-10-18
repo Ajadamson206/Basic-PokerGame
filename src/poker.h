@@ -15,6 +15,8 @@ Joker2 53
 
 
 */
+#ifndef POKER_H
+#define POKER_H
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
@@ -39,10 +41,10 @@ Suit range 1-4
     3 = Hearts
     4 = Clubs
 */
-struct handCard{
+typedef struct handCard{
     int suit;
     int value;
-};
+}Card;
 
 int deck[] = {
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 
@@ -94,7 +96,7 @@ short getCardValue(int card)
     return value;
 }
 
-bool handHasAce(struct handCard* card)
+bool handHasAce(Card* card)
 {
     for (int i = 0; i < 5; i++)
     {
@@ -117,13 +119,13 @@ void replaceCard(int* hand, int* pdeck, int handPos)
     hand[handPos] = *deck;
 }
 
-void updateCard(int Deck, struct handCard* card)
+void updateCard(int Deck, Card* card)
 {
     card->suit = getCardSuit(Deck);
     card->value = getCardValue(Deck);
 }
 
-void replaceHand(struct handCard* hand, int** pDeck, bool* posReplace, int deckSize)
+void replaceHand(Card* hand, int** pDeck, bool* posReplace, int deckSize)
 {
     for(int i = 0; i < deckSize; i++)
     {
@@ -148,6 +150,61 @@ Straight - 4
 3 of a kind - 3
 2 pair - 2
 Jacks or Better - 1
-
-
 */
+// Move b into a
+void swap(int* a, int* b){
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void sort(int hand[], int handSize) 
+{ 
+    int i, j, min; 
+  
+    // One by one move boundary of 
+    // unsorted subarray 
+    for (i = 0; i < handSize - 1; i++) { 
+        // Find the minimum element in 
+        // unsorted array 
+        min = i; 
+        for (j = i + 1; j < handSize; j++) 
+            if (hand[j] < hand[min]) 
+                min = j; 
+  
+        // Swap the found minimum element 
+        // with the first element 
+        swap(&hand[min], &hand[i]); 
+    } 
+} 
+int checkWinnings(Card* hand, int handSize)
+{
+    bool flush, straight, royal;
+    int flushValue = hand[0].suit * handSize;
+    int handSuits = 0;
+    int handValues[handSize];
+
+    for (int i = 0; i < handSize; i++)
+    {
+        handSuits += hand[0].suit;
+        handValues[i] = hand[i].value;
+    }
+    // Check for a flush
+    if (flushValue == handSuits)
+        flush = true;
+    sort(handValues, handSize);
+    // Check for pairs and straight
+    int binaryPairs = 0;
+    int numStraight = 0;
+    for (int i = 0; i < handSize - 1; i++)
+    {
+        // Store Pairs into an integer ie { 4, 4, 4, 8, 8 } becomes 1101 = 13
+        if (handValues[i] == handValues[i+1])
+            binaryPairs++;
+        else if ((handValues[i]+1) == handValues[i+1])
+            numStraight++;
+        binaryPairs = binaryPairs << 1;
+    }
+
+}
+#endif
