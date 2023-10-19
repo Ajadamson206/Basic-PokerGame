@@ -65,9 +65,8 @@ int deck[] = {
             53, 54
             };
 const int* deckStart = &deck[0];
-
 // Shuffle a deck - Uses the Fisher-Yates Shuffle
-void shuffleCards(void){
+extern void shuffleCards(void){
     struct timespec tv;
     timespec_get(&tv, TIME_UTC);
     srand48(tv.tv_nsec);
@@ -82,7 +81,7 @@ void shuffleCards(void){
     }
 }
 // 1 = Diamonds 2 = Spades 3 = Hearts 4 = Clubs 5 = Joker
-short getCardSuit(int card)
+extern short getCardSuit(int card)
 {
     if (card > 52) // Joker
         return 5;
@@ -97,7 +96,7 @@ short getCardSuit(int card)
 
 }
 // 0 = Joker, 1 = Ace, 11 = Jack, 12 = Queen, 13 = King
-short getCardValue(int card)
+extern short getCardValue(int card)
 {
     if (card > 52) // Jokers
         return 0;
@@ -107,7 +106,7 @@ short getCardValue(int card)
     return value;
 }
 
-bool handHasAce(Card* card)
+extern bool handHasAce(Card* card)
 {
     for (int i = 0; i < 5; i++)
     {
@@ -119,24 +118,24 @@ bool handHasAce(Card* card)
     return false;
 }
 
-void resetDeck(void)
+extern void resetDeck(void)
 {
     for(int i = 1; i <= SIZE_OF_DECK; i++)
         deck[i-1] = i;
 }
 
-void replaceCard(int* hand, int* pdeck, int handPos)
+extern void replaceCard(int* hand, int* pdeck, int handPos)
 {
     hand[handPos] = *deck;
 }
 
-void updateCard(int Deck, Card* card)
+extern void updateCard(int Deck, Card* card)
 {
     card->suit = getCardSuit(Deck);
     card->value = getCardValue(Deck);
 }
 
-void replaceHand(Card* hand, int** pDeck, bool* posReplace, int deckSize)
+extern void replaceHand(Card* hand, int** pDeck, bool* posReplace, int deckSize)
 {
     for(int i = 0; i < deckSize; i++)
     {
@@ -163,13 +162,13 @@ Straight - 4
 Jacks or Better - 1
 */
 // Move b into a
-void swap(int* a, int* b){
+extern void swap(int* a, int* b){
     int temp = *a;
     *a = *b;
     *b = temp;
 }
 
-void sort(int hand[], int handSize) 
+extern void sort(int hand[], int handSize) 
 { 
     int i, j, min; 
   
@@ -201,7 +200,7 @@ Straight - 4
 2 pair - 2
 Jacks or Better - 1
 */
-int checkWinnings(Card* hand, int handSize)
+extern int checkWinnings(Card* hand, int handSize)
 {
     bool flush, straight, royal;
     int flushValue = hand[0].suit * handSize;

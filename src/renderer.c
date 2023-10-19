@@ -1,3 +1,6 @@
+#ifndef RENDERERER
+#define RENDERERER
+
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
@@ -147,3 +150,4 @@ static void renderCards(GLuint *vertexBuffer, GLuint *vertexArrayBuffer, GLuint 
 
 
 //}
+#endif

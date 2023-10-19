@@ -1,15 +1,17 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
-
+#include <freetype2/ft2build.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
-#include "singleFiveCard.c"
+
 #include "renderer.c"
 #include "shader.c"
+#include "poker.h"
+#include "singleFiveCard.h"
 
 #define STD_WINDOW_HEIGHT 480
 #define STD_WINDOW_WIDTH 640
