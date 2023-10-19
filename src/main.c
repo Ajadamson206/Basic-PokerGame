@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <math.h>
+#include "singleFiveCard.c"
 #include "renderer.c"
 #include "shader.c"
 
@@ -42,6 +43,41 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
         double mouseX, mouseY;
         glfwGetCursorPos(window,&mouseX, &mouseY);
         printf("MouseX: %f, MouseY: %f\n", mouseX, mouseY);
+        break;
+    case GLFW_KEY_1:
+        if(action == GLFW_PRESS)
+            if(posReplace[0])
+                posReplace[0] = false;
+            else
+                posReplace[0] = true;
+        break;
+    case GLFW_KEY_2:
+        if(action == GLFW_PRESS)
+            if(posReplace[1])
+                posReplace[1] = false;
+            else
+                posReplace[1] = true;
+        break;
+    case GLFW_KEY_3:
+        if(action == GLFW_PRESS)
+            if(posReplace[2])
+                posReplace[2] = false;
+            else
+                posReplace[2] = true;
+        break;
+    case GLFW_KEY_4:
+        if(action == GLFW_PRESS)
+            if(posReplace[3])
+                posReplace[3] = false;
+            else
+                posReplace[3] = true;
+        break;
+    case GLFW_KEY_5:
+        if(action == GLFW_PRESS)
+            if(posReplace[4])
+                posReplace[4] = false;
+            else
+                posReplace[4] = true;
         break;
     }
 }

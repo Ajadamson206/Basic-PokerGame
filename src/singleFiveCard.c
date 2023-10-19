@@ -11,6 +11,15 @@ struct gameSettings{
     short wildCard; // Any Wildcards; 0 for Jokers
 }game = {false , 0};
 
+// Shows which cards to replace {true, false, true, false, true} -> Will replace positions 0, 2, 4
+bool posReplace[HAND_SIZE];
+
+void resetReplace()
+{
+    for(int i = 0; i < HAND_SIZE; i++)
+        posReplace[i] = false;
+}
+
 void updateSettings(bool newJokers, short newWildCard)
 {
     game.jokers = newJokers;
@@ -22,9 +31,9 @@ void play(void)
     while(winnings != 0)
     {
         Card card[HAND_SIZE];
+        resetReplace();
         int* pDeck = deckStart;
         shuffleCards();
-        bool posReplace[HAND_SIZE]; // Shows which cards to replace {true, false, true, false, true} -> Will replace positions 0, 2, 4
         for (int i = 0; i < HAND_SIZE; i++) // Add Cards to the Hand
         {
             if (!game.jokers) // Jokers are not in Game 
@@ -49,14 +58,13 @@ void play(void)
             numCardsPosReplace = 3;
 
         replaceHand(&card[0], &pDeck, posReplace, SIZE_OF_DECK);
-
-        // check for winning patterns
-
+        
         // update winnings
+        winnings += checkWinnings(&card[0], HAND_SIZE);
 
         // end game
         resetDeck();
-
+        winnings--;
     }
 
 }

@@ -24,6 +24,17 @@ Joker2 53
 
 #define SIZE_OF_DECK 54
 
+#define WIN_5_KIND 350
+#define WIN_ROYAL_FLUSH 250
+#define WIN_STRAIGHT_FLUSH 50
+#define WIN_4_KIND 30
+#define WIN_FULL_HOUSE 10
+#define WIN_FLUSH 8
+#define WIN_STRAIGHT 6
+#define WIN_3_KIND 5
+#define WIN_2_KIND 2
+#define WIN_ROYAL_HIGH 1
+
 
 /*
 Value range 1-13
@@ -177,6 +188,19 @@ void sort(int hand[], int handSize)
         swap(&hand[min], &hand[i]); 
     } 
 } 
+/*
+Winnings
+5 of a kind - 350
+Royal Flush - 250
+Straight Flush - 50
+4 of a Kind - 25
+Full House - 9
+Flush - 6
+Straight - 4
+3 of a kind - 3
+2 pair - 2
+Jacks or Better - 1
+*/
 int checkWinnings(Card* hand, int handSize)
 {
     bool flush, straight, royal;
@@ -186,13 +210,16 @@ int checkWinnings(Card* hand, int handSize)
 
     for (int i = 0; i < handSize; i++)
     {
-        handSuits += hand[0].suit;
+        handSuits += hand[i].suit;
         handValues[i] = hand[i].value;
     }
     // Check for a flush
     if (flushValue == handSuits)
         flush = true;
     sort(handValues, handSize);
+    // Check for royal straight flush
+    if (handValues[handSize-1] == 13)
+        royal = true;
     // Check for pairs and straight
     int binaryPairs = 0;
     int numStraight = 0;
@@ -206,5 +233,56 @@ int checkWinnings(Card* hand, int handSize)
         binaryPairs = binaryPairs << 1;
     }
 
+    switch (binaryPairs)
+    {
+        case 0: // No Pair
+            break;
+        case 1: // 1 Pair
+        case 2:
+        case 4:
+        case 8:
+            return WIN_2_KIND;
+            break;
+        case 5:
+        case 9:
+        case 10:
+            return WIN_2_KIND + WIN_2_KIND;
+            break;
+        case 3:
+        case 6:
+        case 12:
+            return WIN_3_KIND;
+            break;
+        case 7:
+        case 14:
+            return WIN_4_KIND;
+            break;
+        case 11:
+        case 13:
+            return WIN_FULL_HOUSE;
+            break;
+        case 15:
+            return WIN_5_KIND;
+            break;
+    } 
+    if(numStraight == handSize-1)
+    {
+        if (flush)
+        {
+            if (royal)
+                return WIN_ROYAL_FLUSH;
+            else
+                return WIN_STRAIGHT_FLUSH;
+        }
+        else
+            return WIN_STRAIGHT;
+    }
+    else if (flush)
+        return WIN_FLUSH;
+
+    if(handValues[handSize-1] >= 11)
+        return WIN_ROYAL_HIGH;
+    
+    return 0;
 }
 #endif
