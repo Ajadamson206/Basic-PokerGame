@@ -64,7 +64,7 @@ int deck[] = {
             40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 
             53, 54
             };
-const int* deckStart = &deck[0];
+int* deckStart = &deck[0];
 // Shuffle a deck - Uses the Fisher-Yates Shuffle
 extern void shuffleCards(void){
     struct timespec tv;

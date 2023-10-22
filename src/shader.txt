@@ -13,14 +13,14 @@
 #define RED_FILE "src/shaders/red.glsl"
 #define BLACK_FILE "src/shaders/black.glsl"
 
-// Load Shaders from a file
+/* Load Shaders from a file
 static const char* getShaderContent(char* fileName)
 {
     FILE *shaderSource;
     long size = 0;
     char* shaderContent;
     
-    /* Read File to get size */
+    // Read File to get size 
     shaderSource = fopen(fileName, "rb");
     if(shaderSource == NULL) {
         fprintf(stderr, "Unable to read shader\n");
@@ -30,14 +30,14 @@ static const char* getShaderContent(char* fileName)
     size = ftell(shaderSource)+1;
     fclose(shaderSource);
 
-    /* Read File for Content */
+    // Read File for Content
     shaderSource = fopen(fileName, "r");
     shaderContent = memset(malloc(size), '\0', size);
     fread(shaderContent, 1, size-1, shaderSource);
     fclose(shaderSource);
 
     return shaderContent;
-}
+}*/
 
 static GLuint shade(char* color)
 {
