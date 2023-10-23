@@ -23,6 +23,7 @@ void resetReplace()
         posReplace[i] = false;
 }
 
+
 void updateSettings(bool newJokers, short newWildCard)
 {
     game.jokers = newJokers;
