@@ -1,7 +1,9 @@
-# Basic-PokerGame
+WIP - # Basic-PokerGame
 Basic Cross-Platform Poker Game made using GLFW
 
--As of 10/15/23-
-Need to work on the game rendering,
-Game basic logic is almost complete.
+As of 10/24/23
+-Slowly converting the code into C++.
+  -Check inProg Branch for status.
+-Text is able to be rendered.
+-The Cards are currently not rendered.
 
