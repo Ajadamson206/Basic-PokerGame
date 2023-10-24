@@ -25,7 +25,7 @@
 #define STD_WINDOW_WIDTH 640
 
 
-Game Poker();
+Game Poker;
 
 struct background{
     float r, g, b, a;
@@ -49,8 +49,6 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
 int main(void)
 {
     GLFWwindow* window;
-    GLuint vertexBuffer[5], vertexArrayBuffer[5], elementBuffer[5];
-
 
     /* Initialize the library */
     if (!glfwInit())
@@ -102,18 +100,10 @@ int main(void)
     // Set the framebuffer Size Function
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    // Compile and Setup text shaders
-    TextRenderer *Text;
-    Text = new TextRenderer(mode->width, mode->height);
-    Text->Load("/home/albert/Documents/Projects/C/Basic-PokerGame/Antonio-Bold.ttf", 24);
+    // Initialize the Poker Game
+    Poker.Init(false, 0, mode->width, mode->height);
 
-    //GLuint whiteProgram = shade(WHITE_FILE);
-    renderCards(&vertexBuffer[0], &vertexArrayBuffer[0], &elementBuffer[0], 5);
-    
-    // Compile and Setup card shaders
-    Shader cardShader = ResourceManager::LoadShader(VERTEX_FILE, WHITE_FILE, nullptr, "card");
-    //Shader cardShader = ResourceManager::LoadShader(VERTEX_FILE, WHITE_FILE, nullptr, "card");
-
+    // Set the background
     updateBackground(0.212f, 0.631f, 0.212f, 1.0f);
 
     // Render Loop
@@ -127,9 +117,8 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         
-
-        Text->RenderText("Winnings", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-        Text->RenderText("(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
+        Poker.Render();
+        
 
         //int vertexColorLocation = glGetUniformLocation(shaderProgram, "Color");
         //cardShader.Use();

@@ -35,6 +35,7 @@ Joker2 53
 #define WIN_2_KIND 2
 #define WIN_ROYAL_HIGH 1
 
+#include "util.h"
 
 /*
 Value range 1-13
@@ -162,31 +163,7 @@ Straight - 4
 Jacks or Better - 1
 */
 // Move b into a
-extern void swap(int* a, int* b){
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
 
-extern void sort(int hand[], int handSize) 
-{ 
-    int i, j, min; 
-  
-    // One by one move boundary of 
-    // unsorted subarray 
-    for (i = 0; i < handSize - 1; i++) { 
-        // Find the minimum element in 
-        // unsorted array 
-        min = i; 
-        for (j = i + 1; j < handSize; j++) 
-            if (hand[j] < hand[min]) 
-                min = j; 
-  
-        // Swap the found minimum element 
-        // with the first element 
-        swap(&hand[min], &hand[i]); 
-    } 
-} 
 /*
 Winnings
 5 of a kind - 350

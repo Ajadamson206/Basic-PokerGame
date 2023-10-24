@@ -7,6 +7,7 @@
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
 #include "deck.h"
+#include "text_render.h"
 
 
 // Game holds all game-related state and functionality.
@@ -25,9 +26,9 @@ public:
     unsigned short          NumReplaced;
     unsigned short          MaxReplace;
     Deck                    MainDeck;
+    TextRenderer            *Text;
     // constructor/destructor
     Game();
-    ~Game();
     // initialize game state (load all shaders/textures/levels)
     void Init(bool jokers, unsigned short wildCard, unsigned int width, unsigned int height);
     // game loop
